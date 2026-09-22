@@ -1,0 +1,707 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b2f24">
+  <title>Konfirmasi Kehadiran Natal</title>
+
+  <!-- CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --green:#0d5138;
+      --green-dark:#082f24;
+      --green-soft:#e7f3ed;
+      --red:#b4232c;
+      --red-soft:#fff0f1;
+      --gold:#d6a84f;
+      --cream:#fffaf0;
+      --ink:#17332a;
+      --muted:#738079;
+      --line:#e6ece8;
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      min-height:100vh;
+      color:var(--ink);
+      font-family:"DM Sans",sans-serif;
+      background:
+        radial-gradient(circle at 10% 0%,rgba(214,168,79,.16),transparent 26%),
+        radial-gradient(circle at 90% 20%,rgba(13,81,56,.10),transparent 28%),
+        #f8f6f0;
+      overflow-x:hidden;
+    }
+
+    .snow-layer{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:20;
+      overflow:hidden;
+    }
+
+    .snow{
+      position:absolute;
+      top:-20px;
+      color:#fff;
+      opacity:.8;
+      filter:drop-shadow(0 2px 2px rgba(0,0,0,.1));
+      animation:fall linear infinite;
+      user-select:none;
+    }
+
+    @keyframes fall{
+      to{transform:translateY(110vh) rotate(360deg)}
+    }
+
+    .hero{
+      position:relative;
+      overflow:hidden;
+      color:#fff;
+      padding:90px 0 120px;
+      background:
+        linear-gradient(135deg,rgba(5,34,25,.96),rgba(13,81,56,.91)),
+        url("https://images.unsplash.com/photo-1512389142860-9c449e58a543?auto=format&fit=crop&w=1800&q=80") center/cover;
+    }
+
+    .hero::after{
+      content:"";
+      position:absolute;
+      left:-5%;
+      right:-5%;
+      bottom:-70px;
+      height:130px;
+      background:#f8f6f0;
+      border-radius:50% 50% 0 0/100% 100% 0 0;
+    }
+
+    .lights{
+      position:absolute;
+      top:20px;
+      left:50%;
+      transform:translateX(-50%);
+      width:min(1000px,95vw);
+      display:flex;
+      justify-content:space-around;
+      z-index:2;
+    }
+
+    .bulb{
+      width:11px;height:16px;border-radius:50% 50% 45% 45%;
+      background:#ffd777;
+      box-shadow:0 0 18px 5px #ffd777;
+      animation:twinkle 1.8s ease-in-out infinite alternate;
+    }
+    .bulb:nth-child(2n){background:#ff7a73;box-shadow:0 0 18px 5px #ff7a73;animation-delay:.3s}
+    .bulb:nth-child(3n){background:#8fe6c0;box-shadow:0 0 18px 5px #8fe6c0;animation-delay:.6s}
+    @keyframes twinkle{from{opacity:.35;transform:scale(.85)}to{opacity:1;transform:scale(1.15)}}
+
+    .hero-badge{
+      display:inline-flex;
+      gap:.55rem;
+      align-items:center;
+      border:1px solid rgba(255,255,255,.28);
+      background:rgba(255,255,255,.10);
+      backdrop-filter:blur(10px);
+      padding:.55rem .9rem;
+      border-radius:999px;
+      font-size:.9rem;
+    }
+
+    .hero h1{
+      font-family:"Playfair Display",serif;
+      font-size:clamp(2.7rem,7vw,5.7rem);
+      line-height:.95;
+      margin:22px 0 18px;
+      text-shadow:0 8px 40px rgba(0,0,0,.22);
+    }
+
+    .hero .sub{
+      max-width:700px;
+      margin:auto;
+      color:rgba(255,255,255,.82);
+      font-size:clamp(1rem,2vw,1.12rem);
+    }
+
+    .star{
+      color:#ffd777;
+      display:inline-block;
+      animation:pulseStar 1.8s ease-in-out infinite;
+    }
+    @keyframes pulseStar{50%{transform:scale(1.2) rotate(8deg);text-shadow:0 0 24px #ffd777}}
+
+    .main-wrap{
+      position:relative;
+      z-index:5;
+      margin-top:-48px;
+      padding-bottom:70px;
+    }
+
+    .panel{
+      background:rgba(255,255,255,.96);
+      border:1px solid rgba(20,67,51,.08);
+      box-shadow:0 20px 55px rgba(21,48,40,.10);
+      border-radius:26px;
+      overflow:hidden;
+    }
+
+    .panel-body{padding:clamp(22px,4vw,40px)}
+
+    .section-icon{
+      width:46px;height:46px;
+      display:grid;place-items:center;
+      border-radius:15px;
+      background:var(--green-soft);
+      color:var(--green);
+      font-size:1.25rem;
+      flex:0 0 auto;
+    }
+
+    .side-card{
+      border:1px solid var(--line);
+      border-radius:20px;
+      padding:20px;
+      background:#fff;
+      box-shadow:0 12px 35px rgba(20,67,51,.06);
+    }
+
+    .form-label{font-weight:700;margin-bottom:.55rem}
+    .form-control,.form-select{
+      min-height:54px;
+      border-radius:14px;
+      border:1px solid #dce4df;
+      padding:.8rem 1rem;
+      box-shadow:none!important;
+    }
+    textarea.form-control{min-height:112px}
+    .form-control:focus,.form-select:focus{border-color:#67a98a}
+
+    .choice{
+      position:relative;
+      display:block;
+      border:1.5px solid #dce4df;
+      border-radius:18px;
+      padding:20px;
+      cursor:pointer;
+      transition:.22s ease;
+      height:100%;
+      background:#fff;
+    }
+    .choice:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(20,67,51,.08)}
+    .choice input{position:absolute;opacity:0}
+    .choice .mark{
+      width:46px;height:46px;border-radius:50%;
+      display:grid;place-items:center;
+      margin-bottom:12px;font-size:1.2rem;
+    }
+    .choice.yes .mark{background:var(--green-soft);color:var(--green)}
+    .choice.no .mark{background:var(--red-soft);color:var(--red)}
+    .choice:has(input:checked).yes{
+      border-color:#2f9b6a;background:linear-gradient(180deg,#f5fff9,#effaf4);
+      box-shadow:0 0 0 3px rgba(47,155,106,.11);
+    }
+    .choice:has(input:checked).no{
+      border-color:#df6670;background:linear-gradient(180deg,#fff8f8,#fff1f2);
+      box-shadow:0 0 0 3px rgba(223,102,112,.10);
+    }
+
+    .btn-christmas{
+      border:0;
+      min-height:56px;
+      border-radius:15px;
+      background:linear-gradient(135deg,#0e6544,#0b4734);
+      color:#fff;
+      font-weight:700;
+      box-shadow:0 12px 28px rgba(13,81,56,.23);
+      transition:.2s ease;
+    }
+    .btn-christmas:hover{color:#fff;transform:translateY(-2px);box-shadow:0 16px 34px rgba(13,81,56,.28)}
+    .btn-christmas:disabled{opacity:.6;transform:none;box-shadow:none}
+
+    .stat-big{
+      font-family:"Playfair Display",serif;
+      font-size:clamp(2.4rem,5vw,4.3rem);
+      line-height:1;
+    }
+
+    .progress{
+      height:12px;
+      border-radius:999px;
+      background:#edf1ef;
+      overflow:hidden;
+    }
+    .progress-bar{
+      background:linear-gradient(90deg,#148b59,#55ba86);
+      border-radius:999px;
+      transition:width .8s ease;
+    }
+
+    .countdown{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:9px;
+    }
+    .count-box{
+      border-radius:14px;
+      background:#f3f7f5;
+      padding:13px 7px;
+      text-align:center;
+      border:1px solid #e5ece8;
+    }
+    .count-box strong{display:block;font-size:1.35rem;color:var(--green-dark)}
+    .count-box span{font-size:.75rem;color:var(--muted)}
+
+    .ornament{
+      position:absolute;
+      width:70px;height:70px;
+      border-radius:50%;
+      background:linear-gradient(145deg,#d02f38,#8e1620);
+      box-shadow:inset -9px -12px 18px rgba(0,0,0,.18),0 10px 28px rgba(0,0,0,.15);
+      opacity:.95;
+    }
+    .ornament::before{
+      content:"";position:absolute;left:26px;top:-18px;width:18px;height:19px;border-radius:5px 5px 2px 2px;background:#d6a84f
+    }
+    .ornament.one{right:7%;bottom:33px;animation:floaty 4s ease-in-out infinite}
+    .ornament.two{left:5%;top:110px;width:44px;height:44px;background:linear-gradient(145deg,#d6a84f,#a57318);animation:floaty 5s ease-in-out infinite reverse}
+    @keyframes floaty{50%{transform:translateY(-12px) rotate(5deg)}}
+
+    .alert-soft{
+      border:0;border-radius:14px;background:#edf8f2;color:#235c44;padding:13px 15px
+    }
+
+    .mini{font-size:.88rem;color:var(--muted)}
+    .footer-note{color:#77817b;font-size:.9rem}
+    .quote{
+      font-family:"Playfair Display",serif;
+      font-style:italic;
+      font-size:1.1rem;
+      color:#6b776f;
+    }
+
+    .closed{
+      border-radius:18px;
+      padding:18px;
+      background:#fff4f4;
+      border:1px solid #ffd5d7;
+      color:#9c2930;
+    }
+
+    .success-pop{
+      animation:pop .4s ease both;
+    }
+    @keyframes pop{from{transform:scale(.92);opacity:0}to{transform:scale(1);opacity:1}}
+
+    @media(max-width:991px){
+      .hero{padding:80px 0 105px}
+      .ornament{display:none}
+      .main-wrap{margin-top:-32px}
+    }
+  </style>
+</head>
+<body>
+
+  <div class="snow-layer" id="snowLayer"></div>
+
+  <header class="hero text-center">
+    <div class="lights" aria-hidden="true">
+      <span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span>
+      <span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span>
+      <span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span>
+    </div>
+    <div class="ornament one"></div>
+    <div class="ornament two"></div>
+
+    <div class="container position-relative">
+      <h1>Konfirmasi Kehadiran<br>Natal 2026</h1>
+      <p class="sub">
+        Mari merayakan sukacita Natal bersama. Isi konfirmasi kehadiran agar panitia dapat
+        mempersiapkan acara dengan lebih baik.
+      </p>
+    </div>
+  </header>
+
+  <main class="main-wrap">
+    <div class="container">
+      <div class="row g-4 align-items-start">
+
+        <div class="col-lg-7">
+          <section class="panel">
+            <div class="panel-body">
+              <div class="d-flex align-items-center gap-3 mb-4">
+                <div class="section-icon"><i class="bi bi-person-check"></i></div>
+                <div>
+                  <h2 class="h4 fw-bold mb-1">Konfirmasi Kehadiran</h2>
+                  <div class="mini">Silakan isi data dengan benar.</div>
+                </div>
+              </div>
+
+              <div id="closedMessage" class="closed mb-4 d-none">
+                <div class="fw-bold mb-1"><i class="bi bi-lock-fill me-2"></i>Pendaftaran telah ditutup</div>
+                <div class="small">Terima kasih atas partisipasinya. Silakan hubungi panitia jika membutuhkan bantuan.</div>
+              </div>
+
+              <form id="rsvpForm">
+                <div class="mb-3">
+                  <label class="form-label">Nama Lengkap <span class="text-danger">*</span></label>
+                  <input id="name" class="form-control" type="text" placeholder="Contoh: Budi Santoso" required>
+                </div>
+
+                <div class="row g-3 mb-3">
+                  <div class="col-md-6">
+                    <label class="form-label">No. WhatsApp <span class="text-danger">*</span></label>
+                    <input id="phone" class="form-control" type="tel" placeholder="08xxxxxxxxxx" required>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label">Jumlah Orang <span class="text-danger">*</span></label>
+                    <select id="guestCount" class="form-select" required>
+                      <option value="1">1 orang</option>
+                      <option value="2">2 orang</option>
+                      <option value="3">3 orang</option>
+                      <option value="4">4 orang</option>
+                      <option value="5">5 orang</option>
+                      <option value="6">6 orang</option>
+                    </select>
+                  </div>
+                </div>
+
+                <label class="form-label d-block mb-2">Apakah Anda ikut Natal? <span class="text-danger">*</span></label>
+                <div class="row g-3 mb-3">
+                  <div class="col-md-6">
+                    <label class="choice yes">
+                      <input type="radio" name="attendance" value="yes" checked>
+                      <span class="mark"><i class="bi bi-check-lg"></i></span>
+                      <span class="fw-bold d-block fs-5">Ya, saya hadir</span>
+                      <span class="mini d-block mt-1">Saya akan hadir dalam perayaan Natal.</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="choice no">
+                      <input type="radio" name="attendance" value="no">
+                      <span class="mark"><i class="bi bi-x-lg"></i></span>
+                      <span class="fw-bold d-block fs-5">Tidak bisa hadir</span>
+                      <span class="mini d-block mt-1">Maaf, saya belum bisa mengikuti acara.</span>
+                    </label>
+                  </div>
+                </div>
+
+                <div class="mb-4">
+                  <label class="form-label">Catatan <span class="mini fw-normal">(opsional)</span></label>
+                  <textarea id="note" class="form-control" placeholder="Tuliskan pesan atau catatan di sini..."></textarea>
+                </div>
+
+                <button id="submitBtn" class="btn btn-christmas w-100" type="submit">
+                  <i class="bi bi-send-fill me-2"></i>Kirim Konfirmasi
+                </button>
+
+                <div class="text-center mt-3 footer-note">
+                  <i class="bi bi-shield-lock me-1"></i>
+                  Data digunakan hanya untuk keperluan acara Natal.
+                </div>
+              </form>
+            </div>
+          </section>
+        </div>
+
+        <div class="col-lg-5">
+          <div class="d-grid gap-4">
+
+            <section class="side-card">
+              <div class="d-flex align-items-center gap-3 mb-3">
+                <div class="section-icon"><i class="bi bi-people-fill"></i></div>
+                <div>
+                  <div class="fw-bold fs-5">Kuota Kehadiran</div>
+                  <div class="mini">Jumlah peserta yang sudah dikonfirmasi</div>
+                </div>
+              </div>
+
+              <div class="d-flex align-items-end gap-2 mb-3">
+                <div class="stat-big" id="registeredText">0</div>
+                <div class="fs-4 fw-semibold text-secondary mb-1">/ <span id="limitText">1200</span></div>
+              </div>
+
+              <div class="progress mb-2">
+                <div class="progress-bar" id="quotaBar" style="width:0%"></div>
+              </div>
+              <div class="d-flex justify-content-between mini">
+                <span id="percentText">0% terisi</span>
+                <span id="remainingText">1200 slot tersisa</span>
+              </div>
+
+              <div class="alert-soft mt-3">
+                <i class="bi bi-info-circle-fill me-2"></i>
+                Pendaftaran otomatis ditutup saat kuota penuh.
+              </div>
+            </section>
+
+            <section class="side-card">
+              <div class="d-flex align-items-center gap-3 mb-3">
+                <div class="section-icon" style="background:#fff0f1;color:#b4232c">
+                  <i class="bi bi-calendar-event-fill"></i>
+                </div>
+                <div>
+                  <div class="fw-bold fs-5">Batas Pendaftaran</div>
+                  <div class="mini" id="deadlineLabel">20 Desember 2026 • 23:59 WIB</div>
+                </div>
+              </div>
+
+              <div class="countdown">
+                <div class="count-box"><strong id="days">00</strong><span>Hari</span></div>
+                <div class="count-box"><strong id="hours">00</strong><span>Jam</span></div>
+                <div class="count-box"><strong id="minutes">00</strong><span>Menit</span></div>
+                <div class="count-box"><strong id="seconds">00</strong><span>Detik</span></div>
+              </div>
+            </section>
+
+            <section class="side-card">
+              <div class="d-flex align-items-center gap-3 mb-3">
+                <div class="section-icon"><i class="bi bi-geo-alt-fill"></i></div>
+                <div>
+                  <div class="fw-bold fs-5">Informasi Acara</div>
+                  <div class="mini">Simpan tanggalnya ya 🎄</div>
+                </div>
+              </div>
+
+              <div class="d-grid gap-3">
+                <div class="d-flex gap-3">
+                  <i class="bi bi-calendar3 text-success"></i>
+                  <div><strong>Jumat, 25 Desember 2026</strong><div class="mini">Hari perayaan Natal</div></div>
+                </div>
+                <div class="d-flex gap-3">
+                  <i class="bi bi-clock text-success"></i>
+                  <div><strong>17:00 WIB</strong><div class="mini">Registrasi dibuka 30 menit sebelumnya</div></div>
+                </div>
+                <div class="d-flex gap-3">
+                  <i class="bi bi-pin-map text-success"></i>
+                  <div><strong>Gedung Acara Natal</strong><div class="mini">Alamat dapat disesuaikan di bagian konfigurasi.</div></div>
+                </div>
+              </div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="text-center mt-5">
+        <div class="quote">“Kemuliaan bagi Allah di tempat yang mahatinggi dan damai sejahtera di bumi.”</div>
+        <div class="mini mt-2">Lukas 2:14</div>
+      </div>
+    </div>
+  </main>
+
+  <div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 rounded-4 overflow-hidden shadow">
+        <div class="modal-body text-center p-5 success-pop">
+          <div class="mx-auto mb-3 d-grid place-items-center rounded-circle bg-success-subtle text-success"
+               style="width:72px;height:72px;font-size:2rem">
+            <i class="bi bi-check2"></i>
+          </div>
+          <h3 class="fw-bold">Terima kasih!</h3>
+          <p class="text-secondary mb-4" id="successText">
+            Konfirmasi kehadiran berhasil disimpan.
+          </p>
+          <button class="btn btn-christmas px-4" data-bs-dismiss="modal">Tutup</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.4/dist/confetti.browser.min.js"></script>
+
+  <script>
+    // ==========================================================
+    // KONFIGURASI - UBAH BAGIAN INI SAJA
+    // ==========================================================
+    const CONFIG = {
+      limit: 1200,
+      initialRegistered: 847, // angka awal demo
+      deadline: "2026-12-20T23:59:59+07:00",
+      storageKey: "christmas_rsvp_2026"
+    };
+
+    // Catatan:
+    // Versi ini menggunakan localStorage untuk DEMO.
+    // Artinya data hanya tersimpan di browser/perangkat masing-masing.
+    // Untuk dipakai umum, ganti proses submit ke Google Sheets / Supabase / Node.js API.
+
+    const $ = (id) => document.getElementById(id);
+    const form = $("rsvpForm");
+    const submitBtn = $("submitBtn");
+    const closedMessage = $("closedMessage");
+    const modal = new bootstrap.Modal($("successModal"));
+
+    function getData(){
+      try{
+        return JSON.parse(localStorage.getItem(CONFIG.storageKey)) || [];
+      }catch{
+        return [];
+      }
+    }
+
+    function saveData(data){
+      localStorage.setItem(CONFIG.storageKey, JSON.stringify(data));
+    }
+
+    function localAttendees(){
+      return getData()
+        .filter(x => x.attendance === "yes")
+        .reduce((sum, x) => sum + Number(x.guestCount || 0), 0);
+    }
+
+    function totalRegistered(){
+      return CONFIG.initialRegistered + localAttendees();
+    }
+
+    function formatNumber(n){
+      return new Intl.NumberFormat("id-ID").format(n);
+    }
+
+    function refreshQuota(){
+      const registered = Math.min(totalRegistered(), CONFIG.limit);
+      const remaining = Math.max(CONFIG.limit - registered, 0);
+      const percent = Math.min((registered / CONFIG.limit) * 100, 100);
+
+      $("registeredText").textContent = formatNumber(registered);
+      $("limitText").textContent = formatNumber(CONFIG.limit);
+      $("quotaBar").style.width = percent.toFixed(1) + "%";
+      $("percentText").textContent = Math.round(percent) + "% terisi";
+      $("remainingText").textContent = formatNumber(remaining) + " slot tersisa";
+
+      if(remaining <= 0){
+        closeForm("Kuota pendaftaran sudah penuh.");
+      }
+    }
+
+    function formatDeadline(){
+      const d = new Date(CONFIG.deadline);
+      $("deadlineLabel").textContent = new Intl.DateTimeFormat("id-ID",{
+        day:"2-digit", month:"long", year:"numeric",
+        hour:"2-digit", minute:"2-digit",
+        timeZone:"Asia/Jakarta"
+      }).format(d) + " WIB";
+    }
+
+    let formClosed = false;
+
+    function closeForm(message){
+      formClosed = true;
+      closedMessage.classList.remove("d-none");
+      closedMessage.querySelector(".small").textContent = message;
+      [...form.elements].forEach(el => el.disabled = true);
+    }
+
+    function updateCountdown(){
+      const deadline = new Date(CONFIG.deadline).getTime();
+      const now = Date.now();
+      let diff = deadline - now;
+
+      if(diff <= 0){
+        diff = 0;
+        if(!formClosed) closeForm("Batas waktu pendaftaran telah berakhir.");
+      }
+
+      const day = Math.floor(diff / 86400000);
+      const hour = Math.floor((diff % 86400000) / 3600000);
+      const minute = Math.floor((diff % 3600000) / 60000);
+      const second = Math.floor((diff % 60000) / 1000);
+
+      $("days").textContent = String(day).padStart(2,"0");
+      $("hours").textContent = String(hour).padStart(2,"0");
+      $("minutes").textContent = String(minute).padStart(2,"0");
+      $("seconds").textContent = String(second).padStart(2,"0");
+    }
+
+    function createSnow(){
+      const layer = $("snowLayer");
+      const count = window.innerWidth < 768 ? 28 : 55;
+
+      for(let i=0;i<count;i++){
+        const s = document.createElement("span");
+        s.className = "snow";
+        s.textContent = Math.random() > .6 ? "❄" : "•";
+        s.style.left = Math.random()*100 + "vw";
+        s.style.fontSize = (Math.random()*14 + 8) + "px";
+        s.style.animationDuration = (Math.random()*7 + 7) + "s";
+        s.style.animationDelay = (-Math.random()*12) + "s";
+        s.style.opacity = (Math.random()*.55 + .2);
+        layer.appendChild(s);
+      }
+    }
+
+    function celebrate(){
+      if(typeof confetti !== "function") return;
+      confetti({
+        particleCount: 130,
+        spread: 80,
+        origin: { y: .65 }
+      });
+    }
+
+    form.addEventListener("submit", function(e){
+      e.preventDefault();
+      if(formClosed) return;
+
+      const name = $("name").value.trim();
+      const phone = $("phone").value.trim();
+      const guestCount = Number($("guestCount").value);
+      const attendance = document.querySelector('input[name="attendance"]:checked')?.value;
+      const note = $("note").value.trim();
+
+      if(!name || !phone || !attendance){
+        alert("Mohon lengkapi data terlebih dahulu.");
+        return;
+      }
+
+      if(attendance === "yes"){
+        const remaining = CONFIG.limit - totalRegistered();
+        if(guestCount > remaining){
+          alert("Maaf, sisa kuota hanya " + remaining + " orang.");
+          return;
+        }
+      }
+
+      const data = getData();
+      data.push({
+        id: crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(),
+        name,
+        phone,
+        guestCount,
+        attendance,
+        note,
+        createdAt: new Date().toISOString()
+      });
+      saveData(data);
+
+      refreshQuota();
+
+      $("successText").textContent =
+        attendance === "yes"
+        ? `Sampai jumpa di perayaan Natal, ${name}! Konfirmasi untuk ${guestCount} orang berhasil disimpan.`
+        : `Terima kasih sudah mengonfirmasi, ${name}. Semoga kita dapat berjumpa di kesempatan berikutnya.`;
+
+      modal.show();
+      if(attendance === "yes") celebrate();
+
+      form.reset();
+      document.querySelector('input[name="attendance"][value="yes"]').checked = true;
+      $("guestCount").value = "1";
+    });
+
+    createSnow();
+    formatDeadline();
+    refreshQuota();
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+  </script>
+</body>
+</html>
